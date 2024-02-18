@@ -1,0 +1,1 @@
+from Clip.configs import Config
