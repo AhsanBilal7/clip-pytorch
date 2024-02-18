@@ -1,15 +1,19 @@
+import torch
+import cv2
+
+
 class CLIPDataset(torch.utils.data.Dataset):
-    def __init__(self, image_filenames, captions, tokenizer, transforms):
+    def __init__(self, image_filenames, captions, tokenizer, transforms, config_info):
         """
         image_filenames and cpations must have the same length; so, if there are
         multiple captions for each image, the image_filenames must have repetitive
         file names
         """
-
+        self.config_info = config_info
         self.image_filenames = image_filenames
         self.captions = list(captions)
         self.encoded_captions = tokenizer(
-            list(captions), padding=True, truncation=True, max_length=CFG.max_length
+            list(captions), padding=True, truncation=True, max_length=self.config_info.max_length
         )
         self.transforms = transforms
 
@@ -19,7 +23,7 @@ class CLIPDataset(torch.utils.data.Dataset):
             for key, values in self.encoded_captions.items()
         }
 
-        image = cv2.imread(f"{CFG.image_path}/{self.image_filenames[idx]}")
+        image = cv2.imread(f"{self.config_info.image_path}/{self.image_filenames[idx]}")
         # print(image.shape)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = self.transforms(image=image)['image']
@@ -34,18 +38,3 @@ class CLIPDataset(torch.utils.data.Dataset):
 
 
 
-def get_transforms(mode="train"):
-    if mode == "train":
-        return A.Compose(
-            [
-                A.Resize(CFG.size, CFG.size, always_apply=True),
-                A.Normalize(max_pixel_value=255.0, always_apply=True),
-            ]
-        )
-    else:
-        return A.Compose(
-            [
-                A.Resize(CFG.size, CFG.size, always_apply=True),
-                A.Normalize(max_pixel_value=255.0, always_apply=True),
-            ]
-        )

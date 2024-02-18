@@ -1,0 +1,7 @@
+README.md
+setup.py
+src/Clip/__init__.py
+src/Clip.egg-info/PKG-INFO
+src/Clip.egg-info/SOURCES.txt
+src/Clip.egg-info/dependency_links.txt
+src/Clip.egg-info/top_level.txt

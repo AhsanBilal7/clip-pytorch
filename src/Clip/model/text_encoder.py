@@ -1,5 +1,10 @@
+from transformers import DistilBertModel, DistilBertConfig, DistilBertTokenizer
+from torch import nn
+from Clip.configs import CFG
+
+config_info = CFG().get_config()
 class TextEncoder(nn.Module):
-    def __init__(self, model_name=CFG.text_encoder_model, pretrained=CFG.pretrained, trainable=CFG.trainable):
+    def __init__(self, model_name=config_info.text_encoder_model, pretrained=config_info.pretrained, trainable=config_info.trainable):
         super().__init__()
         if pretrained:
             self.model = DistilBertModel.from_pretrained(model_name)
