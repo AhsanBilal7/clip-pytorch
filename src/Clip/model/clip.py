@@ -1,9 +1,17 @@
+import torch.nn.functional as F
+from torch import nn
+from Clip.configs import CFG
+from Clip.model.image_encoder import ImageEncoder
+from Clip.model.text_encoder import TextEncoder
+from Clip.model.project_head import ProjectionHead
+
+config_info = CFG().get_config()
 class CLIPModel(nn.Module):
     def __init__(
         self,
-        temperature=CFG.temperature,
-        image_embedding=CFG.image_embedding,
-        text_embedding=CFG.text_embedding,
+        temperature=config_info.temperature,
+        image_embedding=config_info.image_embedding,
+        text_embedding=config_info.text_embedding,
     ):
         super().__init__()
         self.image_encoder = ImageEncoder()

@@ -1,10 +1,15 @@
+from torch import nn
+from Clip.configs import CFG
+import timm
+
+config_info = CFG().get_config()
 class ImageEncoder(nn.Module):
     """
     Encode images to a fixed size vector
     """
 
     def __init__(
-        self, model_name=CFG.model_name, pretrained=CFG.pretrained, trainable=CFG.trainable
+        self, model_name=config_info.model_name, pretrained=config_info.pretrained, trainable=config_info.trainable
     ):
         super().__init__()
         self.model = timm.create_model(
