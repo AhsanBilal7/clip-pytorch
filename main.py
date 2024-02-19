@@ -1,4 +1,5 @@
 import os
+import itertools
 import numpy as np
 import pandas as pd
 import torch
@@ -9,9 +10,23 @@ from Clip.component import AvgMeter
 from Clip.model import CLIPModel
 from tqdm import tqdm
 
+
+dataset = "8k" 
 config_info = CFG().get_config()
 
 
+def get_lr(optimizer):
+    for param_group in optimizer.param_groups:
+        return param_group["lr"]
+
+
+if dataset == "8k":
+  df = pd.read_csv(config_info.captions_path + "/captions.txt")
+  df['id'] = [id_ for id_ in range(df.shape[0] // 5) for _ in range(5)]
+  df.to_csv(config_info.captions_path + "/captions.csv", index=False)
+  df = pd.read_csv(config_info.captions_path + "/captions.csv")
+  image_path = "./content/Images"
+  captions_path = "./content"
 
 def make_train_valid_dfs():
     dataframe = pd.read_csv(f"./{config_info.captions_path}/captions.csv")
@@ -28,29 +43,28 @@ def make_train_valid_dfs():
 
 
 def build_loaders(dataframe, tokenizer, mode):
-    transforms = get_transforms(mode=mode)
+    transforms = get_transforms(mode=mode, config_info = config_info)
     dataset = CLIPDataset(
         dataframe["image"].values,
         dataframe["caption"].values,
         tokenizer=tokenizer,
         transforms=transforms,
+        config_info = config_info
     )
     dataloader = torch.utils.data.DataLoader(
         dataset,
         batch_size=config_info.batch_size,
-        num_workers=config_info.num_workers,
+        # num_workers=config_info.num_workers,
         shuffle=True if mode == "train" else False,
     )
     return dataloader
 
      
-     
-     
 def train_epoch(model, train_loader, optimizer, lr_scheduler, step):
     loss_meter = AvgMeter()
     tqdm_object = tqdm(train_loader, total=len(train_loader))
     for batch in tqdm_object:
-        batch = {k: v.to(CFG.device) for k, v in batch.items() if k != "caption"}
+        batch = {k: v.to(config_info.device) for k, v in batch.items() if k != "caption"}
         loss = model(batch)
         optimizer.zero_grad()
         loss.backward()
