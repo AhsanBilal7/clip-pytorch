@@ -39,6 +39,7 @@ def get_image_embeddings(valid_df, model_path):
     valid_loader = build_loaders(valid_df, tokenizer, mode="valid")
 
     model = CLIPModel().to(config_info.device)
+    print("Loading Model.....")
     model.load_state_dict(torch.load(model_path, map_location=config_info.device))
     model.eval()
 
@@ -102,7 +103,7 @@ def main():
     model, image_embeddings = get_image_embeddings(valid_df, "content/best.pt")  
     find_matches(model,
              image_embeddings,
-             query="boy playing with dog",
+             query="A boy and a dog",
              image_filenames=valid_df['image'].values,
              n=9)
 if __name__ == "__main__":
