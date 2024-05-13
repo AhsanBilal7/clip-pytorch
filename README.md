@@ -4,6 +4,7 @@ This project implements an image-text matching model using the CLIP (Contrastive
 
 ## Trained Weights Link
 Add this in  
+Make a new folder with the name of content
 `content/best.pt`
 
 Link: [Trained Weights Link](https://drive.google.com/file/d/13s0pAYkoIKWPjf4EBeetNNofTJ7edapw/view?usp=sharing)
