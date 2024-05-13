@@ -2,6 +2,12 @@
 
 This project implements an image-text matching model using the CLIP (Contrastive Language-Image Pretraining) framework. The model is capable of encoding both images and textual descriptions into fixed-size vectors and comparing them to find relevant matches between images and text.
 
+## Trained Weights Link
+Add this in  
+`content/best.pt`
+
+Link: [Trained Weights Link](https://drive.google.com/file/d/13s0pAYkoIKWPjf4EBeetNNofTJ7edapw/view?usp=sharing)
+
 ## Overview
 
 The project consists of the following components:
